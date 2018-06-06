@@ -75,16 +75,15 @@ void AppClass::InitVariables(void)
 	std::vector<glm::vec3> lVertex;
 	//vertex 1
 	lVertex.push_back(glm::vec3(-1.0f, -1.0f, 0.0f)); //position
-	lVertex.push_back(glm::vec3(1.0f, 0.0f, 0.0f)); //old color
-	//lVertex.push_back(glm::vec3(0.0f, 1.0f, 1.0f)); //new color
+	lVertex.push_back(glm::vec3(1.0f, 0.0f, 0.0f)); //color
+	
 	//vertex 2
 	lVertex.push_back(glm::vec3(1.0f, -1.0f, 0.0f)); //position
-	lVertex.push_back(glm::vec3(0.0f, 1.0f, 0.0f)); //old color
-	//lVertex.push_back(glm::vec3(1.0f, 0.0f, 1.0f)); //new color
+	lVertex.push_back(glm::vec3(0.0f, 1.0f, 0.0f)); //color
+	
 	//vertex 3
 	lVertex.push_back(glm::vec3(0.0f, 1.0f, 0.0f)); //position
-	lVertex.push_back(glm::vec3(0.0f, 0.0f, 1.0f)); //old color
-	//lVertex.push_back(glm::vec3(1.0f, 1.0f, 0.0f)); //new color
+	lVertex.push_back(glm::vec3(0.0f, 0.0f, 1.0f)); //color
 	
 	glGenVertexArrays(1, &m_uVAO);//Generate vertex array object
 	glGenBuffers(1, &m_uVBO);//Generate Vertex Buffered Object
@@ -101,7 +100,7 @@ void AppClass::InitVariables(void)
 	// Position attribute
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, attributeCount * sizeof(glm::vec3), (GLvoid*)0);
-
+	
 	// Color attribute
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, attributeCount * sizeof(glm::vec3), (GLvoid*)(1 * sizeof(glm::vec3)));
@@ -112,13 +111,13 @@ void AppClass::ProcessKeyboard(sf::Event a_event)
 		m_bRunning = false;
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) //I am currently pressing the Num1 (not the same as above)
 		m_v3Color = glm::vec3(1.0f, 0.0f, 0.0f);
-		//m_v3Color = glm::vec3(0.0f, 1.0f, 1.0f);
+
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
 		m_v3Color = glm::vec3(0.0f, 1.0f, 0.0f);
-		//m_v3Color = glm::vec3(1.0f, 0.0f, 1.0f);
+		
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
 		m_v3Color = glm::vec3(0.0f, 0.0f, 1.0f);
-		//m_v3Color = glm::vec3(1.0f, 1.0f, 0.0f);
+		
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num0))
 		m_v3Color = glm::vec3(-1.0f, -1.0f, -1.0f);
 }
