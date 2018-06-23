@@ -53,6 +53,8 @@ public:
 	*/
 	void Run(void);
 
+	bool toggle = true;
+
 private:
 	/*
 	USAGE: copy constructor, private so it does not let object copy
