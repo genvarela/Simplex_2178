@@ -276,7 +276,28 @@ void MyMesh::GenerateCone(float a_fRadius, float a_fHeight, int a_nSubdivisions,
 	Init();
 
 	// Replace this with your code
-	GenerateCube(a_fRadius * 2.0f, a_v3Color);
+	
+	//TWO TRIANGLE FANS (Flat Base and Pointed Cap)
+	vector3 point0a(0, 0, 0); //Center point of flat fan (at origin)
+	vector3 point0b(0, a_fHeight, 0); //Center point of pointed fan (at cone height)
+
+	//Generates points
+	int n = a_nSubdivisions; //Where N is the number of subdivisions:
+	float rotation_d = 360.00f / (float)n; //Degree of rotation based on subdivisions
+	float rotation_r = (rotation_d * PI) / 180; //in radians
+	//float rotation_d = (rotation_r * 180) / PI;
+	for (int i = 0; i < n; i++) {
+		//converts degree of rotation into coordinates
+		float dial = rotation_r * (float)i; //current point
+		float dialPlus = rotation_r * (float)(i + 1); //next point
+
+		vector3 pointN(a_fRadius*sin(dial), 0, a_fRadius*cos(dial)); //current point
+		vector3 pointNplus(a_fRadius*sin(dialPlus), 0, a_fRadius*cos(dialPlus)); //next point
+
+		AddTri(point0a, pointN, pointNplus); //Flat Base
+		AddTri(point0b, pointNplus, pointN); //Pointed Cap (different order so faces are visible)
+	}
+			
 	// -------------------------------
 
 	// Adding information about color
