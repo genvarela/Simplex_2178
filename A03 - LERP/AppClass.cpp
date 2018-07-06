@@ -2,7 +2,7 @@
 void Application::InitVariables(void)
 {
 	//Change this to your name and email
-	m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu";
+	m_sProgrammer = "Gen Varela - gmv1758@rit.edu";
 	
 	//Set the position and target of the camera
 	//(I'm at [0,0,10], looking at [0,0,0] and up is the positive Y axis)
@@ -24,6 +24,11 @@ void Application::InitVariables(void)
 
 	float fSize = 1.0f; //initial size of orbits
 
+	//ADDED: ************************
+	std::vector<std::vector<vector3>> stopIndex; //List of stop lists
+	int index = 0;
+	//*******************************
+
 	//creating a color using the spectrum 
 	uint uColor = 650; //650 is Red
 	//prevent division by 0
@@ -36,6 +41,23 @@ void Application::InitVariables(void)
 	{
 		vector3 v3Color = WaveLengthToRGB(uColor); //calculate color based on wavelength
 		m_shapeList.push_back(m_pMeshMngr->GenerateTorus(fSize, fSize - 0.1f, 3, i, v3Color)); //generate a custom torus and add it to the meshmanager
+
+		//ADDED: ************************
+		std::vector<vector3> stopList; //List of stops for the sphere to land on
+
+		float rotation_d = 360.00f / (float)i; //Degree of rotation based on subdivisions
+		float rotation_r = (rotation_d * PI) / 180; //in radians
+
+		for (int j = 0; j < m_uOrbits; j++) {
+			float dial = rotation_r * (float)i; //converts the subdivisions into points
+			vector3 stopN(fSize*sin(dial), 0, fSize*cos(dial)); //generates the point
+			stopList.push_back(stopN); //puts the point onto the stop list
+		}
+
+		stopIndex.push_back(stopList); //puts this stop list onto the list 
+		index++;
+		//*******************************
+
 		fSize += 0.5f; //increment the size for the next orbit
 		uColor -= static_cast<uint>(decrements); //decrease the wavelength
 	}
@@ -75,6 +97,19 @@ void Application::Display(void)
 
 		//draw spheres
 		m_pMeshMngr->AddSphereToRenderList(m4Model * glm::scale(vector3(0.1)), C_WHITE);
+
+		/* Must add:
+		1. Change positions of spheres to first position on stop list
+		2. Loop through list of stops
+		3. Interpolate between the current position and the next stop on the list
+		4. Move the sphere (apply transformation matrix)
+		5. Repeat steps 3 and 4 infinitely
+		*/
+
+		// ?????????????????????? 
+		//Loop that loops through the stopIndex vector until it reaches int index
+			//Nested loop that loops through the stopList vector
+				//moves spheres by applying matrices 
 	}
 
 	//render list call
