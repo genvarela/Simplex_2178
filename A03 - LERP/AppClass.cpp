@@ -56,6 +56,26 @@ void Application::InitVariables(void)
 
 		stopIndex.push_back(stopList); //puts this stop list onto the list 
 		index++;
+
+		/* Must add:
+		1. Change positions of spheres to first position on stop list
+		2. Loop through list of stops
+		3. Interpolate between the current position and the next stop on the list
+		4. Move the sphere (apply transformation matrix)
+		5. Repeat steps 3 and 4 infinitely
+		*/
+
+		for (uint i = 0; i < m_uOrbits; ++i)
+		{
+			m_pMeshMngr.
+		}
+		// ?????????????????????? 
+		//Loop that loops through the stopIndex vector until it reaches int index
+		//Nested loop that loops through the stopList vector
+		//moves spheres by applying matrices 
+
+		//The other for > for loop is to go one by one on the spheres and > their possitions.
+
 		//*******************************
 
 		fSize += 0.5f; //increment the size for the next orbit
@@ -92,24 +112,12 @@ void Application::Display(void)
 		m_pMeshMngr->AddMeshToRenderList(m_shapeList[i], glm::rotate(m4Offset, 1.5708f, AXIS_X));
 
 		//calculate the current position
-		vector3 v3CurrentPos = ZERO_V3;
+		//vector3 v3CurrentPos = ZERO_V3;
+		vector3 v3CurrentPos = 
 		matrix4 m4Model = glm::translate(m4Offset, v3CurrentPos);
 
 		//draw spheres
 		m_pMeshMngr->AddSphereToRenderList(m4Model * glm::scale(vector3(0.1)), C_WHITE);
-
-		/* Must add:
-		1. Change positions of spheres to first position on stop list
-		2. Loop through list of stops
-		3. Interpolate between the current position and the next stop on the list
-		4. Move the sphere (apply transformation matrix)
-		5. Repeat steps 3 and 4 infinitely
-		*/
-
-		// ?????????????????????? 
-		//Loop that loops through the stopIndex vector until it reaches int index
-			//Nested loop that loops through the stopList vector
-				//moves spheres by applying matrices 
 	}
 
 	//render list call

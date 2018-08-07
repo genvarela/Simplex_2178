@@ -287,6 +287,96 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	(eSATResults::SAT_NONE has a value of 0)
 	*/
 
+	//SAT Steps:
+	//1. Get the plane/axis we're working with (loops through XYZ A, XYZ B, and 9 crosses of A&B)
+	//2. Find normal vector of the plane (cross product of two edges)
+	//3. Project all the vertices onto the normal 
+	//4. Check the min and max vertices of the shapes for overlaps 
+	//5. If there is an overlap, go back to step 1 and test the next axis
+	// * If ALL of the projections have overlaps, the shapes are colliding
+	// * If AT LEAST ONE of the projections does NOT have an overlap, the shapes are NOT colliding
+
+	MyRigidBody* A = this;
+	MyRigidBody* B = a_pOther;
+	vector3 normal;
+
+	//Test X axis
+	normal = vector3(1.0f, 0.0f, 0.0f);
+
+
+	//X axis on A
+	if (
+			((A->m_v3MaxG.x * normal.x) + (A->m_v3MaxG.y * normal.y) + (A->m_v3MaxG.z * normal.z)) >=
+			((B->m_v3MinG.x * normal.x) + (B->m_v3MinG.y * normal.y) + (B->m_v3MinG.z * normal.z))
+		)
+	{
+		return eSATResults::SAT_AX;
+	}
+	//X axis on B
+	else if (
+			((B->m_v3MaxG.x * normal.x) + (B->m_v3MaxG.y * normal.y) + (B->m_v3MaxG.z * normal.z)) >=
+			((A->m_v3MinG.x * normal.x) + (A->m_v3MinG.y * normal.y) + (A->m_v3MinG.z * normal.z))
+		)
+	{
+		return eSATResults::SAT_BX;
+	}
+
+	
+	//Test Y axis
+	normal = vector3(0.0f, 1.0f, 0.0f);
+
+
+	//Y axis on A
+	if (
+		((A->m_v3MaxG.x * normal.x) + (A->m_v3MaxG.y * normal.y) + (A->m_v3MaxG.z * normal.z)) >=
+		((B->m_v3MinG.x * normal.x) + (B->m_v3MinG.y * normal.y) + (B->m_v3MinG.z * normal.z))
+		)
+	{
+		return eSATResults::SAT_AY;
+	}
+	//Y axis on B
+	else if (
+		((B->m_v3MaxG.x * normal.x) + (B->m_v3MaxG.y * normal.y) + (B->m_v3MaxG.z * normal.z)) >=
+		((A->m_v3MinG.x * normal.x) + (A->m_v3MinG.y * normal.y) + (A->m_v3MinG.z * normal.z))
+		)
+	{
+		return eSATResults::SAT_BY;
+	}
+
+
+	//Test Z axis
+	normal = vector3(0.0f, 0.0f, 1.0f);
+
+
+	//Z axis on A
+	if (
+		((A->m_v3MaxG.x * normal.x) + (A->m_v3MaxG.y * normal.y) + (A->m_v3MaxG.z * normal.z)) >=
+		((B->m_v3MinG.x * normal.x) + (B->m_v3MinG.y * normal.y) + (B->m_v3MinG.z * normal.z))
+		)
+	{
+		return eSATResults::SAT_AZ;
+	}
+	//Z axis on B
+	else if (
+		((B->m_v3MaxG.x * normal.x) + (B->m_v3MaxG.y * normal.y) + (B->m_v3MaxG.z * normal.z)) >=
+		((A->m_v3MinG.x * normal.x) + (A->m_v3MinG.y * normal.y) + (A->m_v3MinG.z * normal.z))
+		)
+	{
+		return eSATResults::SAT_BZ;
+	}
+
+	//Cross AX BX
+	//Cross AX BY
+	//Cross AX BZ
+
+	//Cross AY BX
+	//Cross AY BY
+	//Cross AY BZ
+
+	//Cross AZ BX
+	//Cross AZ BY
+	//Cross AZ BZ
+
 	//there is no axis test that separates this two objects
 	return eSATResults::SAT_NONE;
 }
