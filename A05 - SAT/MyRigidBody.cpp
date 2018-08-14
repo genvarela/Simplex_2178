@@ -303,6 +303,7 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	//Test X axis
 	normal = vector3(1.0f, 0.0f, 0.0f);
 
+	//A->GetModelMatrix.
 
 	//X axis on A
 	if (
@@ -365,7 +366,7 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 		return eSATResults::SAT_BZ;
 	}
 
-	//Cross AX BX
+	//Cross AX BX //i(aybz - azby) - j(axbz - azbx) + k(axby - aybx)
 	//Cross AX BY
 	//Cross AX BZ
 
