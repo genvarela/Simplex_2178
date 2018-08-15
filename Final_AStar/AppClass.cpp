@@ -35,6 +35,7 @@ void Application::InitVariables(void)
 	//m_pMesh->GenerateCone(0.5f, 1.0f, 5, C_WHITE);
 	m_pMesh->GenerateSphere(1.75f, 3, C_MAGENTA);
 
+/* NOTE: THIS A* CODE BREAKS THE PROGRAM. IT IS NOT WORKING NOR COMPLETE.
 	//Added:
 	static std::vector<Node> v3Pos; //List of positions turned Nodes
 #pragma region "Hardcoded Node Positions"
@@ -226,6 +227,7 @@ void Application::InitVariables(void)
 				}
 			}
 #pragma endregion
+*/
 
 }
 void Application::Update(void)
