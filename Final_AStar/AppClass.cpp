@@ -30,22 +30,116 @@ void Application::InitVariables(void)
 
 	}
 */
-
+	
 	m_pMesh = new MyMesh();
 	//m_pMesh->GenerateCone(0.5f, 1.0f, 5, C_WHITE);
 	m_pMesh->GenerateSphere(1.75f, 3, C_MAGENTA);
+
+	//Added:
+	static std::vector<Node> v3Pos; //List of positions turned Nodes
+#pragma region "Hardcoded Node Positions"
+	//ROW 1
+		v3Pos.push_back(Node(vector3(-9, 5, 0),0)); //col 1
+		v3Pos.push_back(Node(vector3(-7, 5, 0),1)); //col 2
+		v3Pos.push_back(Node(vector3(-5, 5, 0),2)); //col 3
+		v3Pos.push_back(Node(vector3(-3, 5, 0),3)); //col 4
+		v3Pos.push_back(Node(vector3(-1, 5, 0),4)); //col 5
+
+		v3Pos.push_back(Node(vector3(1, 5, 0),5)); //col 6
+		v3Pos.push_back(Node(vector3(3, 5, 0),6)); //col 7
+		v3Pos.push_back(Node(vector3(5, 5, 0),7)); //col 8
+		v3Pos.push_back(Node(vector3(7, 5, 0),8)); //col 9
+		v3Pos.push_back(Node(vector3(9, 5, 0),9)); //col 10
+
+	//ROW 2
+		v3Pos.push_back(Node(vector3(-9, 3, 0), 10)); //col 1
+		v3Pos.push_back(Node(vector3(-7, 3, 0), 11)); //col 2
+		v3Pos.push_back(Node(vector3(-5, 3, 0), 12)); //col 3
+		v3Pos.push_back(Node(vector3(-3, 3, 0), 13)); //col 4
+		v3Pos.push_back(Node(vector3(-1, 3, 0), 14)); //col 5
+
+		v3Pos.push_back(Node(vector3(1, 3, 0), 15)); //col 6
+		v3Pos.push_back(Node(vector3(3, 3, 0), 16)); //col 7
+		v3Pos.push_back(Node(vector3(5, 3, 0), 17)); //col 8
+		v3Pos.push_back(Node(vector3(7, 3, 0), 18)); //col 9
+		v3Pos.push_back(Node(vector3(9, 3, 0), 19)); //col 10
+
+	//ROW 3
+		v3Pos.push_back(Node(vector3(-9, 1, 0), 20)); //col 1
+		v3Pos.push_back(Node(vector3(-7, 1, 0), 21)); //col 2
+		v3Pos.push_back(Node(vector3(-5, 1, 0), 22)); //col 3
+		v3Pos.push_back(Node(vector3(-3, 1, 0), 23)); //col 4
+		v3Pos.push_back(Node(vector3(-1, 1, 0), 24)); //col 5
+
+		v3Pos.push_back(Node(vector3(1, 1, 0), 25)); //col 6
+		v3Pos.push_back(Node(vector3(3, 1, 0), 26)); //col 7
+		v3Pos.push_back(Node(vector3(5, 1, 0), 27)); //col 8
+		v3Pos.push_back(Node(vector3(7, 1, 0), 28)); //col 9
+		v3Pos.push_back(Node(vector3(9, 1, 0), 29)); //col 10
+
+	//ROW 4
+		v3Pos.push_back(Node(vector3(-9, -1, 0), 30)); //col 1
+		v3Pos.push_back(Node(vector3(-7, -1, 0), 31)); //col 2
+		v3Pos.push_back(Node(vector3(-5, -1, 0), 32)); //col 3
+		v3Pos.push_back(Node(vector3(-3, -1, 0), 33)); //col 4
+		v3Pos.push_back(Node(vector3(-1, -1, 0), 34)); //col 5
+
+		v3Pos.push_back(Node(vector3(1, -1, 0), 35)); //col 6
+		v3Pos.push_back(Node(vector3(3, -1, 0), 36)); //col 7
+		v3Pos.push_back(Node(vector3(5, -1, 0), 37)); //col 8
+		v3Pos.push_back(Node(vector3(7, -1, 0), 38)); //col 9
+		v3Pos.push_back(Node(vector3(9, -1, 0), 39)); //col 10
+
+	//ROW 5
+		v3Pos.push_back(Node(vector3(-9, -3, 0), 40)); //col 1
+		v3Pos.push_back(Node(vector3(-7, -3, 0), 41)); //col 2
+		v3Pos.push_back(Node(vector3(-5, -3, 0), 42)); //col 3
+		v3Pos.push_back(Node(vector3(-3, -3, 0), 43)); //col 4
+		v3Pos.push_back(Node(vector3(-1, -3, 0), 44)); //col 5
+
+		v3Pos.push_back(Node(vector3(1, -3, 0), 45)); //col 6
+		v3Pos.push_back(Node(vector3(3, -3, 0), 46)); //col 7
+		v3Pos.push_back(Node(vector3(5, -3, 0), 47)); //col 8
+		v3Pos.push_back(Node(vector3(7, -3, 0), 48)); //col 9
+		v3Pos.push_back(Node(vector3(9, -3, 0), 49)); //col 10
+
+	//ROW 6
+		v3Pos.push_back(Node(vector3(-9, -5, 0), 50)); //col 1
+		v3Pos.push_back(Node(vector3(-7, -5, 0), 51)); //col 2
+		v3Pos.push_back(Node(vector3(-5, -5, 0), 52)); //col 3
+		v3Pos.push_back(Node(vector3(-3, -5, 0), 53)); //col 4
+		v3Pos.push_back(Node(vector3(-1, -5, 0), 54)); //col 5
+
+		v3Pos.push_back(Node(vector3(1, -5, 0), 55)); //col 6
+		v3Pos.push_back(Node(vector3(3, -5, 0), 56)); //col 7
+		v3Pos.push_back(Node(vector3(5, -5, 0), 57)); //col 8
+		v3Pos.push_back(Node(vector3(7, -5, 0), 58)); //col 9
+		v3Pos.push_back(Node(vector3(9, -5, 0), 59)); //col 10
+#pragma endregion
+
+	int startNode = 0; //Sets the start Node
+	int endNode = 59; //Sets the end/goal Node
+
+	int currentNode = 0; //Sets the current node in the algorithm
+
+	for each(Node n in v3Pos) //Calls findNeighbors on each Node- neighbors are now stored
+	{
+		n.findNeighbors(v3Pos);
+	}
 
 #pragma region "A* Pseudocode from Medium.Com"
 	// A* (star) Pathfinding
 		// Initialize both open and closed list
 			//let the openList equal empty list of nodes
-			std::vector<vector3*> openList;
+			std::vector<int> openList;
 			// the closedList equal empty list of nodes
-			std::vector<vector3*> closedList;
+			std::vector<int> closedList;
+
+			std::vector<Node> path;
 
 		// Add the start node
 			//put the startNode on the openList (leave it's f at zero)
-			//openList.push_back();
+			openList.push_back(startNode);
 
 		// Loop until you find the end
 			//while the openList is not empty
@@ -53,34 +147,83 @@ void Application::InitVariables(void)
 			{
 				// Get the current node
 					//let the currentNode equal the node with the least f value
+				//**STILL NEED:** PERFORM LINEAR SEARCH ON ALL NODES IN OPENLIST BY COMPARING NODE.F
 					//remove the currentNode from the openList
+				//**STILL NEED:** openList.erase() <- what do I put in here to remove currentNode?
 					//add the currentNode to the closedList
+				closedList.push_back(currentNode);
 
 				// Found the goal
 					//if currentNode is the goal
+				if (v3Pos[currentNode].getIndex() == v3Pos[endNode].getIndex())
+				{
 					//Congratz! You've found the end! Backtrack to get path
+					for(int i=openList.size(); i>0; i--)
+					{
+						path.push_back(v3Pos[openList[i]]);
+					}
+
+					openList.clear();
+				}
 
 				// Generate children
 					//let the children of the currentNode equal the adjacent nodes
+				std::vector<Node> children = v3Pos[currentNode].getNeighbors();
 
 				//for each child in the children
+				for each (Node n in children)
+				{
+					bool inClosed = false;
+					bool inOpen = false;
+					for (int i = 0; i < children.size(); i++)
+					{
+						if (closedList[i] == n.getIndex())
+						{
+							inClosed = true;
+						}
+						if (openList[i] == n.getIndex())
+						{
+							inOpen = true;
+						}
+					}
+
 					// Child is on the closedList
 						//if child is in the closedList
+					if (inClosed || !n.isTraversable())
+					{
 						//continue to beginning of for loop
+						break;
+					}
+
+					
 
 					// Create the f, g, and h values
-						//child.g = currentNode.g + distance between child and current
-						//child.h = distance from child to end
-						//child.f = child.g + child.h
+					//child.g = currentNode.g + distance between child and current
+					n.setG(
+
+						v3Pos[currentNode].getG() +
+						(v3Pos[currentNode].getDistance(n))
+					);
+					//child.h = distance from child to end
+					n.setH(n.getDistance(v3Pos[endNode]));
+					//child.f = child.g + child.h
+					n.setF(n.getG() + n.getH());
 
 					// Child is already in openList
 						//if child.position is in the openList's nodes positions
-							//if the child.g is higher than the openList node's g
+					if (inOpen)
+					{
+						//if the child.g is higher than the openList node's g
+						if (n.getG() > v3Pos[currentNode].getG()) {
 							//continue to beginning of for loop
+							break;
+						}
+					}
 
-				// Add the child to the openList
-				//add the child to the openList
-
+					// Add the child to the openList
+						//add the child to the openList
+					openList.push_back(n.getIndex());
+				}
 			}
 #pragma endregion
 

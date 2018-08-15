@@ -6,33 +6,36 @@
 class Node
 {
 public:
-	Node(vector3 xCoord, vector3 yCoord, vector3 zCoord, int i);
+	Node(float xCoord, float yCoord, float zCoord, int i);
+	Node(vector3 position, int i);
 	~Node();
 
-	void feedNodes(std::vector<Node> v);
+	//void feedNodes(std::vector<Node> v);
 
 	std::vector<Node> getNeighbors();
-	std::vector<Node> findNeighbors(); 
+	std::vector<Node> findNeighbors(std::vector<Node> allN);
+
+	int getDistance(Node other);
 
 	bool isTraversable();
 	void setTraversable(bool b);
 	
 	int getIndex();
 
-	vector3 getX();
-	vector3 getY();
-	vector3 getZ();
+	float getX();
+	float getY();
+	float getZ();
 
 	int getF();
 	int getG();
 	int getH();
 
-	void setF();
-	void setG();
-	void setH();
+	void setF(int newF);
+	void setG(int newG);
+	void setH(int newH);
 
 private:
-	std::vector<Node> allNodes;
+	//std::vector<Node> allNodes;
 
 	std::vector<Node> neighbors;
 
@@ -40,9 +43,9 @@ private:
 
 	int index;
 
-	vector3 x;
-	vector3 y;
-	vector3 z;
+	float x;
+	float y;
+	float z;
 
 	int f;
 	int g;
@@ -56,9 +59,7 @@ private:
 	To Use Node Class:
 	1. Have a list of positions
 	2. Create new Nodes on these positions
-	3. Add the new Nodes to a list of Nodes
-	4. Call feedNodes on each Node and pass in the Node list
-	5. Call findNeighbors on each Node
+	3. Call findNeighbors on each Node
 
 	See AppClass.cpp for A* algorithm
 */

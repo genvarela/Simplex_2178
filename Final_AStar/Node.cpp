@@ -1,6 +1,7 @@
 #include "Node.h"
 
-Node::Node(vector3 xCoord, vector3 yCoord, vector3 zCoord, int i)
+//Constructor 1: Takes floats for custom position
+Node::Node(float xCoord, float yCoord, float zCoord, int i)
 {
 	//allNodes;
 
@@ -21,11 +22,31 @@ Node::Node(vector3 xCoord, vector3 yCoord, vector3 zCoord, int i)
 	h = 0;
 }
 
+//Constructor 2: Takes a position vector
+Node::Node(vector3 position, int i)
+{
+	//Nodes are traversable by default.
+	traversable = true;
+
+	//Nodes store their own indices.
+	index = i;
+
+	x = position[0];
+	y = position[1];
+	z = position[2];
+
+	f = 0;
+	g = 0;
+	h = 0;
+}
+
 
 Node::~Node()
 {
 }
 
+
+/*
 //Put in the list of all the nodes.
 void Node::feedNodes(std::vector<Node> v)
 {
@@ -34,6 +55,7 @@ void Node::feedNodes(std::vector<Node> v)
 		allNodes.push_back(v[i]);
 	}
 }
+*/
 
 //Returns the current set of neighbors. If none have been calculated yet, call findNeighbors().
 std::vector<Node> Node::getNeighbors()
@@ -42,7 +64,7 @@ std::vector<Node> Node::getNeighbors()
 }
 
 //Clears the current set of neighbors, then calculates new ones.
-std::vector<Node> Node::findNeighbors()
+std::vector<Node> Node::findNeighbors(std::vector<Node> allN)
 {
 	//In case there were neighbors calculated already
 	neighbors.clear();
@@ -57,28 +79,95 @@ std::vector<Node> Node::findNeighbors()
 
 	//Calculate up
 	int oneUp = index - 10;
-	if (allNodes[oneUp].traversable && oneUp >= 0)
+	if (allN[oneUp].traversable && oneUp >= 0)
 	{
-		neighbors.push_back(allNodes[oneUp]);
+		neighbors.push_back(allN[oneUp]);
 	}
 
 	int oneDown = index + 10;
-	if (allNodes[oneDown].traversable && oneDown <= 59)
+	if (allN[oneDown].traversable && oneDown <= 59)
 	{
-		neighbors.push_back(allNodes[oneDown]);
+		neighbors.push_back(allN[oneDown]);
 	}
 
 	int oneLeft = index - 1;
-	if (allNodes[oneLeft].traversable && oneLeft %10 != 0)
+	if (allN[oneLeft].traversable && oneLeft %10 != 0)
 	{
-		neighbors.push_back(allNodes[oneLeft]);
+		neighbors.push_back(allN[oneLeft]);
 	}
 
 	int oneRight = index - 1;
-	if (allNodes[oneRight].traversable && oneRight % 10 != 0)
+	if (allN[oneRight].traversable && oneRight % 10 != 0)
 	{
-		neighbors.push_back(allNodes[oneRight]);
+		neighbors.push_back(allN[oneRight]);
 	}
 
 	return neighbors;
+}
+
+//Gets the distance between two Nodes
+int Node::getDistance(Node other)
+{ 
+	//**STILL NEED**
+	return 0;
+}
+
+bool Node::isTraversable()
+{
+	return traversable;
+}
+
+void Node::setTraversable(bool b)
+{
+	traversable = b;
+}
+
+int Node::getIndex()
+{
+	return index;
+}
+
+float Node::getX()
+{
+	return x;
+}
+
+float Node::getY()
+{
+	return y;
+}
+
+float Node::getZ()
+{
+	return z;
+}
+
+int Node::getF()
+{
+	return f;
+}
+
+int Node::getG()
+{
+	return g;
+}
+
+int Node::getH()
+{
+	return h;
+}
+
+void Node::setF(int newF)
+{
+	f = newF;
+}
+
+void Node::setG(int newG)
+{
+	g = newG;
+}
+
+void Node::setH(int newH)
+{
+	h = newH;
 }
