@@ -287,6 +287,8 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	(eSATResults::SAT_NONE has a value of 0)
 	*/
 
+#pragma region "Old Code"
+/*
 	//SAT Steps:
 	//1. Get the plane/axis we're working with (loops through XYZ A, XYZ B, and 9 crosses of A&B)
 	//2. Find normal vector of the plane (cross product of two edges)
@@ -377,7 +379,165 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	//Cross AZ BX
 	//Cross AZ BY
 	//Cross AZ BZ
+*/
+#pragma endregion
+	
+	//Two objects being tested
+	MyRigidBody* A = this;
+	MyRigidBody* B = a_pOther;
 
+	float ra, rb;
+	matrix3 R, AbsR;
+
+	//A's axes 
+	vector3 aX = vector4(1.0f, 0.0f, 0.0f, 0.0f) * A->m_m4ToWorld; //x axis by a's to world
+	vector3 aY = vector4(0.0f, 1.0f, 0.0f, 0.0f) * A->m_m4ToWorld; //y axis by a's to world
+	vector3 aZ = vector4(0.0f, 0.0f, 1.0f, 0.0f) * A->m_m4ToWorld; //z axis by a's to world
+	vector3 aU[] = { aX, aY, aZ };
+
+	//B's axes
+	vector3 bX = vector4(1.0f, 0.0f, 0.0f, 0.0f) * B->m_m4ToWorld; //x axis by b's to world
+	vector3 bY = vector4(0.0f, 1.0f, 0.0f, 0.0f) * B->m_m4ToWorld; //y axis by b's to world
+	vector3 bZ = vector4(0.0f, 0.0f, 1.0f, 0.0f) * B->m_m4ToWorld; //z axis by b's to world
+	vector3 bU[] = { bX, bY, bZ };
+
+	//Creates a translation vector T and puts it into A's coordinates
+	vector3 t = B->GetCenterGlobal() - A->GetCenterGlobal();
+	t = vector3(dot(t, aU[0]), dot(t, aU[1]), dot(t, aU[2]));
+
+/*
+	//Object's half-width vectors along each axis
+	vector3 e_aX = A->GetHalfWidth() * aX;
+	vector3 e_aY = A->GetHalfWidth() * aY;
+	vector3 e_aZ = A->GetHalfWidth() * aZ;
+	vector3 e_A[] = { e_aX, e_aY, e_aZ };
+
+	vector3 e_bX = B->GetHalfWidth() * bX;
+	vector3 e_bY = B->GetHalfWidth() * bY;
+	vector3 e_bZ = B->GetHalfWidth() * bZ;
+	vector3 e_B[] = { e_bX, e_bY, e_bZ };
+*/
+	vector3 eA = A->GetHalfWidth();
+	vector3 eB = B->GetHalfWidth();
+
+	//R is the rotation matrix which puts B into A's coordinates
+	/*
+		R=
+		(ax * bx)(ax * by)(ax * bz)
+		(ay * bx)(ay * by)(ay * bz)
+		(az * bx)(az * by)(az * bz)
+	*/
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			R[i][j] = dot(aU[i], bU[j]);
+		}
+	}
+
+	//Adds Epsilon value to 
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			AbsR[i][j] = abs(R[i][j]) + DBL_EPSILON;
+		}
+	}
+
+	//Test axes aX aY & aZ
+	for (int i = 0; i < 3; i++)
+	{
+		ra = eA[i];
+		rb = (eB[0] * AbsR[i][0]) + (eB[1] * AbsR[i][1]) + (eB[2] * AbsR[i][2]);
+		if (abs(t[i]) > (ra + rb))
+		{
+			return eSATResults::SAT_AX;
+		}
+	}
+
+	//Test axes bX bY & bZ
+	for (int i = 0; i < 3; i++)
+	{
+		ra = (eA[0] * AbsR[0][i]) + (eA[1] * AbsR[1][i]) + (eA[2] * AbsR[2][i]);
+		rb = eB[i];
+		if (abs((t[0] * R[0][i]) + (t[1] * R[1][i]) + (t[2] * R[2][i])) > (ra + rb))
+		{
+			return eSATResults::SAT_BX;
+		}
+	}
+
+	//aX x bX
+	ra = (eA[1] * AbsR[2][0]) + (eA[2] * AbsR[1][0]);
+	rb = (eB[1] * AbsR[0][2]) + (eB[2] * AbsR[0][1]);
+	if (abs((t[2] * R[1][0]) - (t[1] * R[2][0])) > (ra + rb))
+	{
+		return eSATResults::SAT_AXxBX;
+	}
+
+	//aX x bY
+	ra = (eA[1] * AbsR[2][1]) + (eA[2] * AbsR[1][1]);
+	rb = (eB[0] * AbsR[0][2]) + (eB[2] * AbsR[0][0]);
+	if (abs((t[2] * R[1][1]) - (t[1] * R[2][1])) > (ra + rb))
+	{
+		return eSATResults::SAT_AXxBY;
+	}
+
+	//aX x bZ
+	ra = (eA[1] * AbsR[2][2]) + (eA[2] * AbsR[1][2]);
+	rb = (eB[0] * AbsR[0][1]) + (eB[1] * AbsR[0][0]);
+	if (abs((t[2] * R[1][2]) - (t[1] * R[2][2])) > (ra + rb))
+	{
+		return eSATResults::SAT_AXxBZ;
+	}
+
+	//aY x bX
+	ra = (eA[0] * AbsR[2][0]) + (eA[2] * AbsR[0][0]);
+	rb = (eB[1] * AbsR[1][2]) + (eB[2] * AbsR[1][1]);
+	if (abs((t[0] * R[2][0]) - (t[2] * R[0][0])) > (ra + rb))
+	{
+		return eSATResults::SAT_AYxBX;
+	}
+
+	//aY x bY
+	ra = (eA[0] * AbsR[2][1]) + (eA[2] * AbsR[0][1]);
+	rb = (eB[0] * AbsR[1][2]) + (eB[2] * AbsR[1][0]);
+	if (abs((t[0] * R[2][1]) - (t[2] * R[0][1])) > (ra + rb))
+	{
+		return eSATResults::SAT_AYxBY;
+	}
+
+	//aY x bZ
+	ra = (eA[0] * AbsR[2][2]) + (eA[2] * AbsR[0][2]);
+	rb = (eB[1] * AbsR[1][1]) + (eB[1] * AbsR[1][0]);
+	if (abs((t[1] * R[2][2]) - (t[2] * R[0][2])) > (ra + rb))
+	{
+		return eSATResults::SAT_AYxBZ;
+
+	}
+
+	//aZ x bX
+	ra = (eA[0] * AbsR[1][0]) + (eA[1] * AbsR[0][0]);
+	rb = (eB[1] * AbsR[2][2]) + (eB[2] * AbsR[2][1]);
+	if (abs((t[1] * R[0][0]) - (t[0] * R[1][0])) > (ra + rb))
+	{
+		return eSATResults::SAT_AZxBX;
+	}
+
+	//aZ x bY
+	ra = (eA[0] * AbsR[1][1]) + (eA[1] * AbsR[0][1]);
+	rb = (eB[0] * AbsR[2][2]) + (eB[2] * AbsR[2][0]);
+	if (abs((t[1] * R[0][1]) - (t[0] * R[1][1])) > (ra + rb))
+	{
+		return eSATResults::SAT_AZxBY;
+	}
+
+	//aZ x bZ
+	ra = (eA[0] * AbsR[1][2]) + (eA[1] * AbsR[0][2]);
+	rb = (eB[0] * AbsR[2][1]) + (eB[1] * AbsR[2][0]);
+	if (abs((t[1] * R[0][2]) - (t[0] * R[1][2])) > (ra + rb))
+	{
+		return eSATResults::SAT_AZxBZ;
+	}
 	//there is no axis test that separates this two objects
 	return eSATResults::SAT_NONE;
 }
