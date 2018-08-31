@@ -68,7 +68,20 @@ void Application::ProcessMouseScroll(sf::Event a_event)
 void Application::ProcessKeyPressed(sf::Event a_event)
 {
 	//Added:
-	vector3 currentPos = m_pCamera->GetPosition(); 
+	vector3 currentPos = m_pCamera->GetPosition(); //Shorcut for current position 
+	vector3 currentTarget = m_pCamera->GetTarget(); //Shortcut for current forward/target
+	vector3 currentUp = m_pCamera->GetUp(); //Shortcut for current up/above
+
+	vector3 currentPosPlus = currentTarget - currentPos; //One unit forward of the camera
+	currentPosPlus = glm::normalize(currentPosPlus);
+
+	vector3 left = glm::cross(currentUp, currentPosPlus); //One unit left of the camera
+	vector3 right = glm::cross(currentPosPlus, currentUp); //One unit right of the camera
+
+	float speed = 0.1f; //Speed of movement
+
+	//vector4 currentPosv4 = vector4(currentPos, 1.0f);
+	//matrix4 translation;
 
 	switch (a_event.key.code)
 	{
@@ -78,36 +91,102 @@ void Application::ProcessKeyPressed(sf::Event a_event)
 
 	//Added:
 	case sf::Keyboard::W:
+
+#pragma region "Old Code"
+		/* From https://learnopengl.com/Getting-started/Camera
+		void processInput(GLFWwindow *window)
+		{
+		...
+		float cameraSpeed = 0.05f; // adjust accordingly
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		cameraPos += cameraSpeed * cameraFront;
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		cameraPos -= cameraSpeed * cameraFront;
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+		}
+		*/
 		
-		
+		//translation = glm::translate(translation, vector3(0.0f, 0.0f, 1.0f));
+		//currentPos = currentPosv4 * translation;
+
+		//vector3 newPos = currentPos * glm::translate()
+
 		//vector3 currentPos = vector3(0.0f, 3.0f, 20.0f);
-		m_pCamera->SetPosition(vector3(currentPos[0], currentPos[1], moveZ));
-		m_pCamera->SetTarget(vector3(currentPos[0], currentPos[1], moveZ + 1));
-		moveZ += 0.1f;
+
+		//m_pCamera->SetPosition(vector3(currentPos[0], currentPos[1], moveZ));
+		//m_pCamera->SetTarget(vector3(currentPos[0], currentPos[1], moveZ + 1.0f));
+		//moveZ += 0.1f;
+
+		//m_pCamera->SetPosition(currentPos);
+
+		/*
+			glm::mat4 translate = glm::translate(glm::mat4(1.f), glm::vec3(2.f, 0.f, 0.f));
+			glm::vec4 vector(1.f,1.f,1.f,1.f);
+			glm::vec4 transformedVector = translate * vector;
+		*/
+		
+		//translation = glm::translate(glm::mat4(1.0f), glm::vec3(2.f, 0.f, 0.f));
+		//currentPosPlus = currentPosv4 * translation;
+		
+		//m_pCamera->SetPosition(currentPos);
+		//m_pCamera->SetTarget(currentPosPlus);
+
 			//m_pCamera->SetPosition(vector3(0.0f, 3.0f, testF));
 			//m_pCamera->SetTarget(vector3(0.0f, 3.0f, testF + 1));
 			//testF += 0.1f;
+#pragma endregion
+
+		currentPos += currentPosPlus * speed;
+		currentTarget += currentPosPlus * speed;
+
+		m_pCamera->SetPosition(currentPos);
+		m_pCamera->SetTarget(currentTarget);
+
 		break;
 	case sf::Keyboard::S:
 
 		//vector3 currentPos = m_pCamera->GetPosition();
-		m_pCamera->SetPosition(vector3(currentPos[0], currentPos[1], moveZ));
-		m_pCamera->SetTarget(vector3(currentPos[0], currentPos[1], moveZ + 1));
-		moveZ -= 0.1f;
+		//m_pCamera->SetPosition(vector3(currentPos[0], currentPos[1], moveZ));
+		//m_pCamera->SetTarget(vector3(currentPos[0], currentPos[1], moveZ + 1));
+		//moveZ -= 0.1f;
+
+		currentPos -= currentPosPlus * speed;
+		currentTarget -= currentPosPlus * speed;
+
+		m_pCamera->SetPosition(currentPos);
+		m_pCamera->SetTarget(currentTarget);
+
 		break;
 	case sf::Keyboard::A:
 
 		//vector3 currentPos = m_pCamera->GetPosition();
-		m_pCamera->SetPosition(vector3(moveX, currentPos[1], currentPos[2]));
-		m_pCamera->SetTarget(vector3(moveX, currentPos[1], currentPos[2] +1));
-		moveX += 0.1f;
+		//m_pCamera->SetPosition(vector3(moveX, currentPos[1], currentPos[2]));
+		//m_pCamera->SetTarget(vector3(moveX, currentPos[1], currentPos[2] +1));
+		//moveX += 0.1f;
+
+		currentPos += left * speed;
+		currentTarget += left * speed;
+
+		m_pCamera->SetPosition(currentPos);
+		m_pCamera->SetTarget(currentTarget);
+
 		break;
 	case sf::Keyboard::D:
 
 		//vector3 currentPos = m_pCamera->GetPosition();
-		m_pCamera->SetPosition(vector3(moveX, currentPos[1], currentPos[2]));
-		m_pCamera->SetTarget(vector3(moveX, currentPos[1], currentPos[2] + 1));
-		moveX -= 0.1f;
+		//m_pCamera->SetPosition(vector3(moveX, currentPos[1], currentPos[2]));
+		//m_pCamera->SetTarget(vector3(moveX, currentPos[1], currentPos[2] + 1));
+		//moveX -= 0.1f;
+
+		currentPos += right * speed;
+		currentTarget += right * speed;
+
+		m_pCamera->SetPosition(currentPos);
+		m_pCamera->SetTarget(currentTarget);
+
 		break;
 	}
 	
