@@ -38,6 +38,9 @@ class MyRigidBody
 
 	std::set<MyRigidBody*> m_CollidingRBSet; //set of rigid bodies this one is colliding with
 
+	//Added: stores enum results of the SAT 
+	eSATResults flag = eSATResults::SAT_NONE;
+
 public:
 	/*
 	Usage: Constructor
@@ -225,6 +228,10 @@ public:
 	Output: ---
 	*/
 	void SetModelMatrix(matrix4 a_m4ModelMatrix);
+
+	//Added: Getter and setter for the flag variable
+	eSATResults GetFlag();
+	void SetFlag(eSATResults f);
 #pragma endregion
 	
 private:

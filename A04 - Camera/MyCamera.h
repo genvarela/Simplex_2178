@@ -6,7 +6,6 @@ Date: 2017/06
 #define __MYCAMERACLASS_H_
 
 #include "Definitions.h"
-
 namespace Simplex
 {
 

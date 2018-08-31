@@ -124,6 +124,19 @@ void MyRigidBody::SetModelMatrix(matrix4 a_m4ModelMatrix)
 	//we calculate the distance between min and max vectors
 	m_v3ARBBSize = m_v3MaxG - m_v3MinG;
 }
+
+//Added: returns the current stored value of the SAT results
+eSATResults Simplex::MyRigidBody::GetFlag()
+{
+	return flag;
+}
+//Added: changes the stored value of the SAT results
+void Simplex::MyRigidBody::SetFlag(eSATResults f)
+{
+	flag = f;
+}
+
+
 //The big 3
 MyRigidBody::MyRigidBody(std::vector<vector3> a_pointList)
 {
@@ -451,6 +464,7 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 		rb = (eB[0] * AbsR[i][0]) + (eB[1] * AbsR[i][1]) + (eB[2] * AbsR[i][2]);
 		if (abs(t[i]) > (ra + rb))
 		{
+			flag = eSATResults::SAT_AX;
 			return eSATResults::SAT_AX;
 		}
 	}
@@ -462,6 +476,7 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 		rb = eB[i];
 		if (abs((t[0] * R[0][i]) + (t[1] * R[1][i]) + (t[2] * R[2][i])) > (ra + rb))
 		{
+			flag = eSATResults::SAT_BX;
 			return eSATResults::SAT_BX;
 		}
 	}
@@ -471,6 +486,7 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	rb = (eB[1] * AbsR[0][2]) + (eB[2] * AbsR[0][1]);
 	if (abs((t[2] * R[1][0]) - (t[1] * R[2][0])) > (ra + rb))
 	{
+		flag = eSATResults::SAT_AXxBX;
 		return eSATResults::SAT_AXxBX;
 	}
 
@@ -479,6 +495,7 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	rb = (eB[0] * AbsR[0][2]) + (eB[2] * AbsR[0][0]);
 	if (abs((t[2] * R[1][1]) - (t[1] * R[2][1])) > (ra + rb))
 	{
+		flag = eSATResults::SAT_AXxBY;
 		return eSATResults::SAT_AXxBY;
 	}
 
@@ -487,6 +504,7 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	rb = (eB[0] * AbsR[0][1]) + (eB[1] * AbsR[0][0]);
 	if (abs((t[2] * R[1][2]) - (t[1] * R[2][2])) > (ra + rb))
 	{
+		flag = eSATResults::SAT_AXxBZ;
 		return eSATResults::SAT_AXxBZ;
 	}
 
@@ -495,6 +513,7 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	rb = (eB[1] * AbsR[1][2]) + (eB[2] * AbsR[1][1]);
 	if (abs((t[0] * R[2][0]) - (t[2] * R[0][0])) > (ra + rb))
 	{
+		flag = eSATResults::SAT_AYxBX;
 		return eSATResults::SAT_AYxBX;
 	}
 
@@ -503,6 +522,7 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	rb = (eB[0] * AbsR[1][2]) + (eB[2] * AbsR[1][0]);
 	if (abs((t[0] * R[2][1]) - (t[2] * R[0][1])) > (ra + rb))
 	{
+		flag = eSATResults::SAT_AYxBY;
 		return eSATResults::SAT_AYxBY;
 	}
 
@@ -511,6 +531,7 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	rb = (eB[1] * AbsR[1][1]) + (eB[1] * AbsR[1][0]);
 	if (abs((t[1] * R[2][2]) - (t[2] * R[0][2])) > (ra + rb))
 	{
+		flag = eSATResults::SAT_AYxBZ;
 		return eSATResults::SAT_AYxBZ;
 
 	}
@@ -520,6 +541,7 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	rb = (eB[1] * AbsR[2][2]) + (eB[2] * AbsR[2][1]);
 	if (abs((t[1] * R[0][0]) - (t[0] * R[1][0])) > (ra + rb))
 	{
+		flag = eSATResults::SAT_AZxBX;
 		return eSATResults::SAT_AZxBX;
 	}
 
@@ -528,6 +550,7 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	rb = (eB[0] * AbsR[2][2]) + (eB[2] * AbsR[2][0]);
 	if (abs((t[1] * R[0][1]) - (t[0] * R[1][1])) > (ra + rb))
 	{
+		flag = eSATResults::SAT_AZxBY;
 		return eSATResults::SAT_AZxBY;
 	}
 
@@ -536,6 +559,7 @@ uint MyRigidBody::SAT(MyRigidBody* const a_pOther)
 	rb = (eB[0] * AbsR[2][1]) + (eB[1] * AbsR[2][0]);
 	if (abs((t[1] * R[0][2]) - (t[0] * R[1][2])) > (ra + rb))
 	{
+		flag = eSATResults::SAT_AZxBZ;
 		return eSATResults::SAT_AZxBZ;
 	}
 	//there is no axis test that separates this two objects

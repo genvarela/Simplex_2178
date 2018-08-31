@@ -22,6 +22,11 @@ void Application::InitVariables(void)
 	m_pSteve = new Model();
 	m_pSteve->Load("Minecraft\\Steve.obj");
 	m_pSteveRB = new MyRigidBody(m_pSteve->GetVertexList());
+
+	//Added: Dividing Plane
+	//m_pMeshMngr->GeneratePlane(1.0f, C_MAGENTA);
+	//dPlane = new Mesh();
+	//dPlane->GeneratePlane(6.0f, C_MAGENTA);
 }
 void Application::Update(void)
 {
@@ -59,6 +64,52 @@ void Application::Update(void)
 		m_pMeshMngr->PrintLine("YES!", C_RED);
 	else
 		m_pMeshMngr->PrintLine("no", C_YELLOW);
+
+	//Added:
+	matrix4 mdPlane_Basic = glm::translate(m_pCreeperRB->GetCenterGlobal()) * ToMatrix4(m_qCreeper) * ToMatrix4(m_qArcBall); //Dividing Plane's basic transformation matrix
+	mdPlane_Basic = mdPlane_Basic * glm::scale(vector3(2.0f)); //Make it bigger so it's easier to see
+
+	//m_pMeshMngr->AddPlaneToRenderList(mdPlane_Basic, C_MAGENTA, RENDER_SOLID); //Renders the dividing plane
+
+	if (m_pCreeperRB->GetFlag() == eSATResults::SAT_AX)
+	{
+		//matrix4 mdPlane_SAT = mdPlane_Basic * glm::rotate(90.0f, AXIS_Y);
+		//m_pMeshMngr->AddPlaneToRenderList(mdPlane_SAT, C_YELLOW, RENDER_SOLID);
+		m_pMeshMngr->AddPlaneToRenderList(mdPlane_Basic, C_MAGENTA, RENDER_SOLID);
+	}
+
+	if (m_pCreeperRB->GetFlag() == eSATResults::SAT_BX)
+	{
+		m_pMeshMngr->AddPlaneToRenderList(mdPlane_Basic, C_YELLOW, RENDER_SOLID);
+	}
+
+#pragma region "Old Code"
+	//dPlane->Render(m4Projection, m4View, glm::rotate(glm::translate(dPlanePos), 45.0f, AXIS_Y));
+
+	//Cube - Taken from previous exercise
+	//v3Position = vector3(glm::sin(glm::radians(dAngle * 0)) * 3.0f, glm::cos(glm::radians(dAngle * 0)) * 3.0f, 0.0f);
+	//m_pCube->Render(m4Projection, m4View, glm::rotate(glm::translate(v3Position), glm::radians(static_cast<float>(dTimer) * 20.0f), AXIS_X));
+	
+	//dPlane->Render()
+
+	//vector3 dPlanePos = m_pCreeperRB->GetCenterGlobal();
+	//vector3 dPlaneRot = vector3(0.0f, 0.0f, 0.0f);
+	//if (m_pCreeperRB->GetFlag() == eSATResults::SAT_AX)
+	//{
+	//	m_pMeshMngr->AddPlaneToRenderList(glm::translate(dPlanePos) * glm::scale(vector3(2.0f)), C_MAGENTA, RENDER_SOLID);
+		//glm::rotate(glm::translate(dPlaneRot), 90.0f, AXIS_Y);
+	//}
+
+	//matrix4 m4Model = glm::translate(IDENTITY_M4, dPlanePos);
+	//dPlane->Render(m4Projection, m4View, m4Model);
+
+	//matrix4 m4View = m_pCameraMngr->GetViewMatrix(); //view Matrix
+	//matrix4 m4Projection = m_pCameraMngr->GetProjectionMatrix(); //Projection Matrix
+
+	//vector3 dPlanePos = m_pCreeperRB->GetCenterGlobal();
+
+	//dPlane->Render(m4Projection, m4View, mdPlane);
+#pragma endregion
 }
 void Application::Display(void)
 {
@@ -95,6 +146,9 @@ void Application::Release(void)
 
 	//release the rigid body for the model
 	SafeDelete(m_pSteveRB);
+
+	//Added:
+	//SafeDelete(dPlane);
 
 	//release GUI
 	ShutdownGUI();

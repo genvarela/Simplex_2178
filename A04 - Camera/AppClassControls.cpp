@@ -67,12 +67,50 @@ void Application::ProcessMouseScroll(sf::Event a_event)
 //Keyboard
 void Application::ProcessKeyPressed(sf::Event a_event)
 {
+	//Added:
+	vector3 currentPos = m_pCamera->GetPosition(); 
+
 	switch (a_event.key.code)
 	{
 	default: break;
 	case sf::Keyboard::Space:
 		break;
+
+	//Added:
+	case sf::Keyboard::W:
+		
+		
+		//vector3 currentPos = vector3(0.0f, 3.0f, 20.0f);
+		m_pCamera->SetPosition(vector3(currentPos[0], currentPos[1], moveZ));
+		m_pCamera->SetTarget(vector3(currentPos[0], currentPos[1], moveZ + 1));
+		moveZ += 0.1f;
+			//m_pCamera->SetPosition(vector3(0.0f, 3.0f, testF));
+			//m_pCamera->SetTarget(vector3(0.0f, 3.0f, testF + 1));
+			//testF += 0.1f;
+		break;
+	case sf::Keyboard::S:
+
+		//vector3 currentPos = m_pCamera->GetPosition();
+		m_pCamera->SetPosition(vector3(currentPos[0], currentPos[1], moveZ));
+		m_pCamera->SetTarget(vector3(currentPos[0], currentPos[1], moveZ + 1));
+		moveZ -= 0.1f;
+		break;
+	case sf::Keyboard::A:
+
+		//vector3 currentPos = m_pCamera->GetPosition();
+		m_pCamera->SetPosition(vector3(moveX, currentPos[1], currentPos[2]));
+		m_pCamera->SetTarget(vector3(moveX, currentPos[1], currentPos[2] +1));
+		moveX += 0.1f;
+		break;
+	case sf::Keyboard::D:
+
+		//vector3 currentPos = m_pCamera->GetPosition();
+		m_pCamera->SetPosition(vector3(moveX, currentPos[1], currentPos[2]));
+		m_pCamera->SetTarget(vector3(moveX, currentPos[1], currentPos[2] + 1));
+		moveX -= 0.1f;
+		break;
 	}
+	
 	//gui
 	gui.io.KeysDown[a_event.key.code] = true;
 	gui.io.KeyCtrl = a_event.key.control;

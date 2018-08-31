@@ -67,7 +67,7 @@ void Application::InitVariables(void)
 
 		for (uint i = 0; i < m_uOrbits; ++i)
 		{
-			m_pMeshMngr.
+			//m_pMeshMngr.
 		}
 		// ?????????????????????? 
 		//Loop that loops through the stopIndex vector until it reaches int index

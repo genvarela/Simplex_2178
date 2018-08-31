@@ -3,17 +3,23 @@ using namespace Simplex;
 void Application::InitVariables(void)
 {
 	//Change this to your name and email
-	m_sProgrammer = "Alberto Bobadilla - labigm@rit.edu";
+	m_sProgrammer = "Gen Varela - gmv1758@rit.edu";
 
 	//Set the position and target of the camera
 	//(I'm at [0,0,10], looking at [0,0,0] and up is the positive Y axis)
 	m_pCameraMngr->SetPositionTargetAndUp(AXIS_Z * 10.0f, ZERO_V3, AXIS_Y);
 
+	//Added:
+	moveX = 0.0f;
+	moveY = 3.0f;
+	moveZ = 20.0f;
+
 	//init the camera
 	m_pCamera = new MyCamera();
 	m_pCamera->SetPositionTargetAndUp(
-			vector3(0.0f, 3.0f, 20.0f), //Where my eyes are
-			vector3(0.0f, 3.0f, 19.0f), //where what I'm looking at is
+			//vector3(0.0f, 3.0f, 20.0f), //Where my eyes are
+			vector3(moveX, moveY, moveZ), //Added
+			vector3(moveX, moveY, moveZ +1), //where what I'm looking at is
 			AXIS_Y);					//what is up
 
 	//Get the singleton
@@ -30,6 +36,7 @@ void Application::Update(void)
 
 	//Is the first person camera active?
 	CameraRotation();
+
 
 	//Add objects to the Manager
 	for (int j = -50; j < 50; j += 2)
@@ -59,7 +66,7 @@ void Application::Display(void)
 	
 	//draw gui
 	DrawGUI();
-	
+
 	//end the current frame (internally swaps the front and back buffers)
 	m_pWindow->display();
 }
