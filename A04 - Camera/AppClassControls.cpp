@@ -11,6 +11,7 @@ void Application::ProcessMouseMovement(sf::Event a_event)
 	if(!m_pSystem->IsWindowFullscreen() && !m_pSystem->IsWindowBorderless())
 		m_v3Mouse += vector3(-8.0f, -32.0f, 0.0f);
 	gui.io.MousePos = ImVec2(m_v3Mouse.x, m_v3Mouse.y);
+
 }
 void Application::ProcessMousePressed(sf::Event a_event)
 {
@@ -27,6 +28,45 @@ void Application::ProcessMousePressed(sf::Event a_event)
 	case sf::Mouse::Button::Right:
 		gui.m_bMousePressed[2] = true;
 		m_bFPC = true;
+
+		//Added:
+#pragma region "Added:"
+		//1. Get current orientation as a quaternion
+		//2. Get arcball quaternion from mouse input
+		//3. temp quaternion = Multiply arcball and current orientation 
+		//4. make current orientation equal to temp quaternion
+
+		vector3 currentPos = m_pCamera->GetPosition(); //Shorcut for current position 
+		vector3 currentTarget = m_pCamera->GetTarget(); //Shortcut for current forward/target
+		vector3 currentUp = m_pCamera->GetUp(); //Shortcut for current up/above
+
+		vector3 currentPosPlus = currentTarget - currentPos; //One unit forward of the camera
+		currentPosPlus = glm::normalize(currentPosPlus);
+
+		vector4 currentTargetv4 = vector4(currentTarget, 1.0f);
+
+		matrix4 quatRot = glm::toMat4(m_qArcBall);
+		vector3 newTarget = quatRot * currentTargetv4;
+
+		m_pCamera->SetTarget(newTarget);
+		//m_qArcBall
+		//m_pCamera = glm::rotate()
+
+		/* http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-17-quaternions/
+		Quaternions in GLM
+		How do I create quaternions in GLM?
+		glm::quatmyQuaternion; (identity quaternion)
+		glm::quatmyQuaternion= glm::quat(w,x,y,z);
+		glm::quatmyQuaternion= quat(vec3(x,y,z));
+		glm::quatmyQuaternion= gtx::quaternion::angleAxis(rotationAngle[in degrees]), RotationAxis(vec3));
+
+		Translate quaternion to rotation matrix:
+		glm::mat4 RotationMatrix= quaternion::toMat4(quaternion);
+
+		SLERP between two quaternions
+		glm::mix
+		*/
+#pragma endregion
 		break;
 	}
 

@@ -20,6 +20,7 @@ class Application
 	MyMeshManager* m_pMyMeshMngr = nullptr; //My Mesh Manager
 	String m_sProgrammer = "Gen Varela - gmv1758@rit.edu";
 
+	//Added:
 	float moveX;
 	float moveY;
 	float moveZ;
